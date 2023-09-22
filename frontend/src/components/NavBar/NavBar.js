@@ -1,17 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './NavBar.css'
 import { VscChromeClose } from "react-icons/vsc";
 import { TiThMenu } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  async function checkSessionID() {
+    try{
+      const {data, status} = await axios.get('/api/user');
+    } catch(e){
+      navigate('/login')
+    }
+  }
+  
+
+  async function onLogout(){
+    const {data, status} = await axios.post('/api/logout');
+
+    if(status == 200){
+        navigate('/login')
+    }
+    console.log(data);
+}
+
+useEffect(() => {
+  checkSessionID()
+}, []);
   return (
     <div className=' mt-1 bg-white  z-index'>
       <div className="mx-4 ">
@@ -49,6 +73,7 @@ const NavBar = () => {
           <div className="ml-auto flex items-center">
             <input className={`visible min-md-hidden px-8  py-2 placeholder:text-md text-md font-light placeholder:text-gray-600/80 rounded-lg bg-gray-200/40 `} placeholder="Search for help.." />
             <div className='hidden md:block text-lg font-semibold ml-7 pr-10 text-gray-700'><FaUserAlt /></div>
+            <button onClick={() => onLogout()}>Logout</button>
           </div>
           <div className='md:hidden ml-5'>
             <button className='hover:text-pink-600 text-xl font-bold mr-5 scale-125' onClick={toggleMenu}>
