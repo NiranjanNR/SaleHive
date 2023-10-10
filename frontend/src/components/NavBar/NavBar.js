@@ -34,7 +34,7 @@ const NavBar = () => {
 }
 
 useEffect(() => {
-  checkSessionID()
+  //checkSessionID()
 }, []);
   return (
     <div className=' mt-1 bg-white  z-index'>

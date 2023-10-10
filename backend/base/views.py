@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .products import products
 
@@ -14,14 +15,17 @@ from .validations import custom_validation, validate_email, validate_password
 
 # Create your views here.
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getRoutes(requests):
     return Response("products")
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getProducts(requests):
     return Response(products)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getProduct(requests,pk):
     product = None
     for i in products:
@@ -29,6 +33,8 @@ def getProduct(requests,pk):
             product = i
             break
     return Response(product)
+
+
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
@@ -72,3 +78,4 @@ class UserView(APIView):
 	def get(self, request):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+	
