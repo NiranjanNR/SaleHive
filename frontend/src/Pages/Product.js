@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import NavBar from '../components/NavBar/NavBar';
 import { BsCartFill } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -17,7 +17,7 @@ const Product = () => {
         async function fetchProduct() {
             const { data } = await axios.get('/api/products/')
             setProducts(data)
-            setRequiredProduct((products.filter((item) => item.id === id)))
+            setRequiredProduct((products.filter((item) => item.id == id)))
         }
         fetchProduct()
     }, [id, products])
@@ -48,10 +48,10 @@ const Product = () => {
                             }
                         </div>
                         <div className='flex mt-6 border-b border-gray-500/50 pb-10'>
-                            <div className='py-4 mr-5 pl-16 pr-20 flex items-center bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
+                            <Link to={`/product/Addtocart/${id}`} className='py-4 mr-5 pl-16 pr-20 flex items-center bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
                                 <BsCartFill className='text-white mr-3' />
                                 ADD TO CART
-                            </div>
+                            </Link>
                             <div className='py-4 pl-12 pr-16 flex items-center justify-center border border-gray-500 text-gray-800 font-semibold hover:border-gray-800'>
                                 <AiOutlineHeart className='text-gray-800 mr-2 text-lg' />
                                 Wishlist
