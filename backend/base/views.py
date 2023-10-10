@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .products import products
 
@@ -9,20 +10,26 @@ from django.contrib.auth import get_user_model, login, logout
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer, CartItemSerializer
 from rest_framework import permissions, status
 from .validations import custom_validation, validate_email, validate_password
-
+from .models import Product, Cart, CartItem
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 # Create your views here.
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def getRoutes(requests):
-    return Response("products")
+def getRoutes(request):
+    products = Product.objects.all()
+    data = list(products.values())
+    return JsonResponse(data, safe=False)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getProducts(requests):
-    return Response(products)
+    products = Product.objects.all()
+    data = list(products.values())
+    return JsonResponse(data, safe=False)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -34,6 +41,32 @@ def getProduct(requests,pk):
             break
     return Response(product)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_cart(request):
+    user = request.user
+    cart_items = CartItem.objects.filter(cart__user=user)
+    serializer = CartItemSerializer(cart_items, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def add_to_cart(request):
+    product_id = request.data.get('product_id')
+    product = get_object_or_404(Product, pk=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    cart_item.quantity += 1
+    cart_item.save()
+    return JsonResponse({'message': 'Item added to cart'}, status=200)
+
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def remove_from_cart(request):
+    cart_item_id = request.data.get('cart_item_id')
+    cart_item = get_object_or_404(CartItem, pk=cart_item_id)
+    cart_item.delete()
+    return JsonResponse({'message': 'Item removed from cart'}, status=200)
 
 
 class UserRegister(APIView):

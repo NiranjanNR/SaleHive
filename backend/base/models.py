@@ -4,7 +4,14 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 
 # Create your models here.
+class Cart(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_cart')
+    items = models.ManyToManyField('Product', through='CartItem')
 
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, username=None):
         if not email:
@@ -37,6 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)  # Add this field
     is_staff = models.BooleanField(default=False)   # Add this field
 
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, null=True, blank=True, related_name='user_profile')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -46,21 +54,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
     
 class Product(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=200, null=True, blank=True) # null=True, blank=True -> optional field  
-    # image =
-    brand = models.CharField(max_length=200, null=True, blank=True)
-    category = models.CharField(max_length=200, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True) # max_digits=7 -> 9999.99
-    numReviews = models.IntegerField(null=True, blank=True, default=0)
-    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-    countInStock = models.IntegerField(null=True, blank=True, default=0)
-    createdAt = models.DateTimeField(auto_now_add=True) # auto_now_add=True -> set the date automatically when the product is created
-    id = models.AutoField(primary_key=True, editable=False) # editable=False -> the id cannot be changed
+    name = models.CharField(max_length=255, default='Default Product Name')
+    quantity = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    image = models.URLField(default='https://example.com/default-image.jpg')
+    description = models.TextField(default='Default product description')
 
     def __str__(self):
         return self.name
+    
     
 class Review(models.Model): 
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
@@ -113,21 +115,3 @@ class ShippingAddress(models.Model):
     def __str__(self):
         return str(self.address)
     
-
-class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return f"Cart for {self.user.username} ({self.created_at})"
-    
-class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    
-    def __str__(self):
-        return f"CartItem: {self.product.name} ({self.quantity} units)"
-    
-    def get_total_price(self):
-        return self.product.price * self.quantity
