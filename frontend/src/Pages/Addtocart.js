@@ -92,7 +92,7 @@ const Addtocart = () => {
                     ))}
                     <div className='mt-7 flex justify-center '>
                         <button className='py-[12px] mr-5 pl-16 pr-20 flex items-center bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
-                            ADD TO CART
+                            Place Order
                         </button>
                     </div>
                 </div>
