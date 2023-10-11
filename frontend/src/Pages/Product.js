@@ -47,16 +47,17 @@ const Product = () => {
                             ))
                             }
                         </div>
-                        <div className='flex mt-6 border-b border-gray-500/50 pb-10'>
-                            <Link to={`/product/Addtocart/${id}`} className='py-4 mr-5 pl-16 pr-20 flex items-center bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
-                                <BsCartFill className='text-white mr-3' />
-                                ADD TO CART
-                            </Link>
-                            <div className='py-4 pl-12 pr-16 flex items-center justify-center border border-gray-500 text-gray-800 font-semibold hover:border-gray-800'>
-                                <AiOutlineHeart className='text-gray-800 mr-2 text-lg' />
-                                Wishlist
-                            </div>
-                        </div>
+                        <div className='flex flex-col md:flex-row mt-6 border-b border-gray-500/50 pb-10'>
+  <Link to={`/product/Addtocart/${id}`} className='py-4 md:mr-5 pl-4 md:pl-16 pr-4 md:pr-20 mb-2 md:mb-0 flex items-center justify-center md:justify-start bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
+    <BsCartFill className='text-white md:mr-3' />
+    ADD TO CART
+  </Link>
+  <div className='py-4 pl-4 md:pl-12 pr-4 md:pr-16 flex items-center justify-center border border-gray-500 text-gray-800 font-semibold hover:border-gray-800'>
+    <AiOutlineHeart className='text-gray-800 md:mr-2 text-lg' />
+    Wishlist
+  </div>
+</div>
+
                         <div className='text-xl text-gray-800 font-semibold py-6'>Product description:</div>
                         <div className='text-gray-800/50'>{item.description}</div>
 

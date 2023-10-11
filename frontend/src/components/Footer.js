@@ -6,7 +6,7 @@ export default function Footme() {
       <Typography color="blue-gray" className="font-normal">
         &copy; 2023 SaleHive
       </Typography>
-      <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8  gap-y-2 gap-x-8">
         <li>
           <Typography
             as="a"
