@@ -6,6 +6,7 @@ import { BsCartFill } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
 import Items from '../components/Items/Items';
 import Footme from '../components/Footer';
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
 
@@ -13,6 +14,8 @@ const Product = () => {
 
     const [products, setProducts] = useState([])
     const [requiredProduct, setRequiredProduct] = useState([])
+    const navigate = useNavigate();
+
     useEffect(() => {
         async function fetchProduct() {
             const { data } = await axios.get('/api/products/')
@@ -22,6 +25,16 @@ const Product = () => {
         fetchProduct()
     }, [id, products])
 
+    async function addToCart(){
+        const {data, status} = await axios.post('/api/add_to_cart/', {
+            "product_id": parseInt(id),
+        });
+        console.log(data);
+        if(status == 200){
+            navigate('/cart')
+        }
+
+    }
     const numbers = [1, 2, 3, 4, 5, 6]
     const [number, setNumber] = useState(false)
 
@@ -48,10 +61,10 @@ const Product = () => {
                             }
                         </div>
                         <div className='flex flex-col md:flex-row mt-6 border-b border-gray-500/50 pb-10'>
-  <Link to={`/product/Addtocart/${id}`} className='py-4 md:mr-5 pl-4 md:pl-16 pr-4 md:pr-20 mb-2 md:mb-0 flex items-center justify-center md:justify-start bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
+  <button onClick={() => addToCart()} className='py-4 md:mr-5 pl-4 md:pl-16 pr-4 md:pr-20 mb-2 md:mb-0 flex items-center justify-center md:justify-start bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
     <BsCartFill className='text-white md:mr-3' />
     ADD TO CART
-  </Link>
+  </button>
   <div className='py-4 pl-4 md:pl-12 pr-4 md:pr-16 flex items-center justify-center border border-gray-500 text-gray-800 font-semibold hover:border-gray-800'>
     <AiOutlineHeart className='text-gray-800 md:mr-2 text-lg' />
     Wishlist

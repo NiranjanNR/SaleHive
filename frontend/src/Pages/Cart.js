@@ -3,15 +3,17 @@ import axios from 'axios';
 import {
     AiOutlineArrowRight
 } from "react-icons/ai";
-import Truncate from 'react-truncate';
+import { useNavigate } from "react-router-dom";
+import NavBar from '../components/NavBar/NavBar';
 
 
 
-const Addtocart = () => {
+const Cart = () => {
 
     const [cart, setCart] = useState([])
     const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchProduct() {
@@ -20,6 +22,7 @@ const Addtocart = () => {
                 const { data: filter } = await axios.get('/api/products/');
                 setProducts(filter);
                 setCart(data);
+                console.log(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 // Handle the error as needed (e.g., show an error message to the user)
@@ -28,18 +31,34 @@ const Addtocart = () => {
         fetchProduct();
     }, []);
 
+    async function removeFromCart(id){
+        const {data, status} = await axios.post('/api/remove_from_cart/', {
+            "cart_item_id": id,
+        });
+        if(status == 200){
+            navigate('/')
+        }
+
+    }
+
     useEffect(() => {
-        // Filter products that are in the cart
-        const filtered = products.filter(product =>
-            cart.some(cartItem => cartItem.id == product.id)
-        );
+        const filtered = products.map(product => {
+            const cartItem = cart.find(cartItem => cartItem.product == product.id);
+            if (cartItem) {
+                return {
+                    ...product,
+                    cart_item: cartItem.id
+                };
+            }
+        }).filter(Boolean);
         setFilteredProducts(filtered);
-        console.log(filteredProducts);
+        console.log(filtered);
     }, [cart, products]);
 
     return (
         <div className=''>
             <div className=''>
+            <NavBar />
                 <div className='mb-5 flex justify-center border-b-2 p-6 text-black/50 tracking-[1.5px] text-[14px] font-semibold'>
                     -------- Your Bag --------
                 </div>
@@ -84,7 +103,10 @@ const Addtocart = () => {
                                     </div>
                                     <div className='mr-4'>
                                         <span className='font-bold text-[#7b4000ce]'>₹{item.price}</span><br />
-                                    </div>
+                                    </div> 
+                                    <button onClick={() => removeFromCart(item.cart_item)} className="my-2 px-3 py-2 bg-red-500 text-white rounded-2xl font-bold">
+                                        Remove
+                                    </button>
                                 </div>
                             </div>
 
@@ -102,4 +124,4 @@ const Addtocart = () => {
     )
 }
 
-export default Addtocart
+export default Cart
