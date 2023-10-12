@@ -31,11 +31,11 @@ const Cart = () => {
         fetchProduct();
     }, []);
 
-    async function removeFromCart(id){
-        const {data, status} = await axios.post('/api/remove_from_cart/', {
+    async function removeFromCart(id) {
+        const { data, status } = await axios.post('/api/remove_from_cart/', {
             "cart_item_id": id,
         });
-        if(status == 200){
+        if (status == 200) {
             navigate('/')
         }
 
@@ -58,8 +58,8 @@ const Cart = () => {
     return (
         <div className=''>
             <div className=''>
-            <NavBar />
-                <div className='mb-5 flex justify-center border-b-2 p-6 text-black/50 tracking-[1.5px] text-[14px] font-semibold'>
+                <NavBar />
+                <div className='my-5 flex justify-center  p-3 text-black/50 tracking-[1.5px] text-[14px] font-semibold'>
                     -------- Your Bag --------
                 </div>
                 <div className='flex justify-center mb-4'>
@@ -103,7 +103,7 @@ const Cart = () => {
                                     </div>
                                     <div className='mr-4'>
                                         <span className='font-bold text-[#7b4000ce]'>₹{item.price}</span><br />
-                                    </div> 
+                                    </div>
                                     <button onClick={() => removeFromCart(item.cart_item)} className="my-2 px-3 py-2 bg-red-500 text-white rounded-2xl font-bold">
                                         Remove
                                     </button>
