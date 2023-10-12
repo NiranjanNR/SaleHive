@@ -59,30 +59,34 @@ const Cart = () => {
         <div className=''>
             <div className=''>
                 <NavBar />
-                <div className='my-5 flex justify-center  p-3 text-black/50 tracking-[1.5px] text-[14px] font-semibold'>
-                    -------- Your Bag --------
+                <div className='mb-5 flex justify-center border-b-2 p-6 text-[#7b4000ce] tracking-[1.5px] text-xl font-mono font-semibold'>
+                    Your Bag
                 </div>
                 <div className='flex justify-center mb-4'>
-                    <div className=' border-2 py-5 px-3 w-[42%] text-[13px] flex justify-center'>
+                    <div className=' border-2 py-5 px-3 text-[13px] grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-lg rounded-xl'>
                         <div className='mr-4'>
                             Deliver to: <span className='font-semibold'>abc@gmail.com</span><br />
                             <span className='text-[11px] '>1234 Laughing Lane, Hahaville, Chuckles County, ROFL 98765 ...</span>
                         </div>
-                        <button className='mr-5 pl-7 pr-10 ml-4 flex items-center border border-[#7b4000ce] hover:bg-[#7b400004] text-[#7b4000ce] font-semibold'>
+                        <div className='flex justify-center'>
+                        <button className='p-2 flex items-center justify-center border border-[#7b4000ce] hover:bg-[#7b400004] text-[#7b4000ce] font-semibold w-1/2 '>
                             Change Address
                         </button>
+                        </div>
                     </div>
                 </div>
 
                 <div className='flex justify-center'>
-                    <div className=' border-2 py-5 px-3 w-[42%] text-[13px] flex justify-center'>
+                    <div className='border-2 py-5 px-3 text-[13px] grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-lg rounded-xl'>
                         <div className='mr-4'>
                             <span className='font-bold'>% Available offers</span><br />
                             <span className='text-[11px] '>Earn Cashback: Every online purchase earns you cashback rew...</span>
                         </div>
-                        <button className='mr-5 pl-8 pr-8 ml-4 flex items-center border border-[#7b4000ce] hover:bg-[#7b400004] text-[#7b4000ce] font-semibold'>
+                        <div className='flex justify-center'>
+                        <button className='p-2 flex items-center justify-center border border-[#7b4000ce] hover:bg-[#7b400004] text-[#7b4000ce] font-semibold w-1/2 '>
                             Check it out <span className='ml-3'><AiOutlineArrowRight /></span>
                         </button>
+                        </div>
                     </div>
                 </div>
                 <div className='mt-7 flex justify-center '>
@@ -91,8 +95,10 @@ const Cart = () => {
                 <div>
                     {filteredProducts.map((item) => (
                         <div className='flex justify-center mt-4'>
-                            <div className=' border-2 py-5 px-3 w-[42%] text-[13px] flex'>
+                            <div className='grid grid-cols-1 sm:grid-cols-2 border-2 w-1/2 text-[13px] shadow-lg rounded-xl'>
+                            <div className='flex items-center justify-center'>
                                 <img src={item.image} alt="" className=" rounded-lg h-32 " />
+                                </div>
                                 <div className='ml-6'>
                                     <div className=''>
                                         <span className='font-bold text-[14px]'>{item.name}</span><br />
@@ -104,7 +110,7 @@ const Cart = () => {
                                     <div className='mr-4'>
                                         <span className='font-bold text-[#7b4000ce]'>₹{item.price}</span><br />
                                     </div>
-                                    <button onClick={() => removeFromCart(item.cart_item)} className="my-2 px-3 py-2 bg-red-500 text-white rounded-2xl font-bold">
+                                    <button onClick={() => removeFromCart(item.cart_item)} className="my-2 px-3 py-2 bg-red-500 text-white rounded-lg font-bold">
                                         Remove
                                     </button>
                                 </div>
@@ -113,7 +119,7 @@ const Cart = () => {
                         </div>
                     ))}
                     <div className='mt-7 flex justify-center '>
-                        <button className='py-[12px] mr-5 pl-16 pr-20 flex items-center bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
+                        <button className=' px-2 py-3 rounded-md mb-5 flex items-center bg-[rgb(123,63,0)] hover:bg-[#7b4000ce] text-white font-semibold'>
                             Place Order
                         </button>
                     </div>
